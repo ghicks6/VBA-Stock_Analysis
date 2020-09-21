@@ -1,0 +1,132 @@
+Sub Stockmarket_Data ()
+ 
+ ' LOOP THROUGH ALL SHEETS
+  Dim WS As Worksheet
+    For Each ws In ActiveWorkbook.Worksheets
+    WS.Activate
+        ' --------------------------------------------
+        ' DEFINE THE VARIABLES
+        ' --------------------------------------------
+    ' Set an initial variable for holding the Ticker Symbol
+        Dim Ticker_Symbol As String
+
+      ' Set an initial variable for holding Opening Stock Price
+         Dim Opening_Price As Double
+
+      ' Set an initial variable for holding the Closing stock Price
+          Dim Closing_Price as Double
+
+      ' Set an initial variable for holding the Yearly Change
+          Dim Yearly_Change as Double
+
+      ' Set an initial variable for holding the Percent Change
+          Dim Percent_Change as Double
+
+      ' Set an initial variable for holding the Total Volume of the Stock
+          Dim Total_Stock_Volume as Double
+
+        'Set the Total Volume to zero 
+           Total_Stock_Volume = 0
+
+      ' Define varibles for the Rows and Columns
+          Dim Row as Double
+          Row = 2
+          Dim Column as Integer
+          Column = 1
+          Dim i as Long
+                 
+        ' --------------------------------------------
+        ' INSERT THE HEADERS
+        ' --------------------------------------------
+      'Add the Headers
+           Cells(1, 9).Value = "Ticker"
+           Cells(1, 10).Value = "Yearly Change"
+           Cells(1, 11).Value = "Percent Change"
+           Cells(1, 12).Value = "Total Stock Volume"
+
+        ' --------------------------------------------
+        ' INSERT THE DATA
+        ' --------------------------------------------
+      ' Determine the Last Row
+           LastRow = WS.Cells(Rows.Count, 1).End(xlUp).Row
+
+             'Set Initial Open Price
+             Opening_Price = Cells(2, Column + 2).Value
+
+              'Set Initial Close Price
+            Closing_Price = 0
+  
+      ' Loop through all of the Stock Transactions
+           For i = 2 To LastRow
+
+            ' Check if we are still within the same stock ticker symbol, if it is not...
+                If Cells(i + 1, Column).Value <> Cells(i, Column).Value Then
+
+              ' Set Ticker Symbol
+                 Ticker_Symbol = Cells(i, Column).Value
+                  Cells(Row, Column + 8).Value = Ticker_Symbol
+
+                 ' Set the Closing Price
+                    Closing_Price = Cells(i, Column + 5).Value
+
+                  ' Add the Yearly Change
+                      Yearly_Change = Closing_Price - Opening_Price
+                      Cells(Row, Column + 9).Value = Yearly_Change
+
+                 ' Add Percent Change
+                      If (Opening_Price = 0 And Closing_Price = 0) Then
+                        Percent_Change = 0
+       
+                     Else
+                        Percent_Change = Yearly_Change / Opening_Price
+                         Cells(Row, Column + 10).Value = Percent_Change
+                        Cells(Row, Column + 10).NumberFormat = "0.00%"
+                     End If 
+
+                 ' Add to the Total Stock Volume amount
+                     Total_Stock_Volume = Total_Stock_Volume + Cells(i, Column + 6).Value
+                     Cells(Row, Column + 11).Value = Total_Stock_Volume
+
+                  ' Add one to the summary table row
+                      Row = Row + 1
+
+                  ' Reset the Opening Price
+                     Opening_Price = Cells(i +1, Column + 2)
+
+                  ' Reset the Total Stock Volume
+                      Total_Stock_Volume = 0
+                      
+              'If Cells have the same ticker symbol
+                Else  
+                  Total_Stock_Volume = Total_Stock_Volume + Cells(i, Column + 6).Value
+             End If
+
+             Next i
+
+            ' Determine the Last Row of Yearly Change per WS
+            YCLastRow = WS.Cells(Rows.Count, Column + 8).End(xlUp).Row
+            
+            ' Set the cell colors
+            For j = 2 To YCLastRow
+              
+              If (Cells(j, Column + 9).Value > 0 Or Cells(j, Column +9).Value = 0) Then
+                  Cells (j, Column + 9).Interior.ColorIndex = 4
+              
+              ElseIf Cells(j, Column + 9).Value < 0 Then
+                    Cells(j, Column + 9).Interior.ColorIndex = 3
+                
+              End If
+            
+            Next j
+
+            'resize Columns
+              Columns("I:Q").EntireColumn.AutoFit
+    
+    End Sub
+
+
+
+
+           Cells(2, 15).Value = "Greatest % Increase"
+           Cells(3, 15).Value = "Greatest % Decrease"
+           Cells(4, 15).Value = "Greatest Total Volume"
