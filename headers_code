@@ -1,0 +1,14 @@
+Sub Stockmarket_Data()
+' LOOP THROUGH ALL SHEETS
+  For Each ws In Worksheets
+
+ ' Determine the Last Row
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+  
+  'Add the Headers
+    Cells(1, 9).Value = "Ticker"
+    Cells(1, 10).Value = "Yearly Change"
+    Cells(1, 11).Value = "Percent Change"
+    Cells(1, 12).Value = "Total Stock Volume"
+
+End Sub
