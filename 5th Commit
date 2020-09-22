@@ -1,0 +1,142 @@
+Sub Stockmarket_Data ()
+ 
+ ' LOOP THROUGH ALL SHEETS
+  Dim ws As Worksheet
+    For Each ws In Worksheets
+        ' --------------------------------------------
+        ' DEFINE THE VARIABLES
+        ' --------------------------------------------
+    ' Set an initial variable for holding the Ticker Symbol
+        Dim Ticker_Symbol As String
+
+      ' Set an initial variable for holding Opening Stock Price
+         Dim Opening_Price As Double
+
+      ' Set an initial variable for holding the Closing stock Price
+          Dim Closing_Price as Double
+
+      ' Set an initial variable for holding the Yearly Change
+          Dim Yearly_Change as Double
+
+      ' Set an initial variable for holding the Percent Change
+          Dim Percent_Change as Double
+
+      ' Set an initial variable for holding the Total Volume of the Stock
+          Dim Total_Stock_Volume as Double
+
+        'Set the Total Volume to zero 
+           Total_Stock_Volume = 0
+
+        ' Set an initial variable for the previous amount
+          Dim Previous_Amount As Long
+          Previous_Amount = 0
+
+        'Set the Summary Table Row
+          Dim Summary_Table_Row as Long
+          Summary_Table_Row = 2
+
+        'Set an intial variable for holding the Greatest Increase and Greatest Decrease and intitial values
+            Dim Greatest_Increase as Double
+            Greatest_Increase = 0
+            Dim Greatest_Decrease as Double
+            Greatest_Decrease = 0
+        
+        'Set an Intial Variable and value for Greatest Total Volume
+            Dim Greatest_Total_Volume as Double
+            Greatest_Total_Volume = 0
+                 
+        ' --------------------------------------------
+        ' INSERT THE HEADERS
+        ' --------------------------------------------
+      'Add the Headers
+           ws.Cells(1, 9).Value = "Ticker"
+           ws.Cells(1, 10).Value = "Yearly Change"
+           ws.Cells(1, 11).Value = "Percent Change"
+           ws.Cells(1, 12).Value = "Total Stock Volume"
+           ws.Cells(2, 15).Value = "Greatest % Increase"
+           ws.Cells(3, 15).Value = "Greatest % Decrease"
+           ws.Cells(4, 15).Value = "Greatest Total Volume"
+
+        ' --------------------------------------------
+        ' INSERT THE DATA
+        ' --------------------------------------------
+      ' Determine the Last Row
+           Dim LastRow as Long
+           LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+             'Set Initial Open Price
+             Opening_Price = ws.Range("C" & Previous_Amount)
+
+              'Set Initial Close Price
+            Closing_Price = 0
+  
+      ' Loop through all of the Stock Transactions
+           For i = 2 To LastRow
+
+            ' Check if we are still within the same stock ticker symbol, if it is not...
+                If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+
+              ' Set Ticker Symbol
+                 Ticker_Symbol = ws.Cells(i, 1).Value
+              
+              ' Print the Ticker Sumbol in the Summary Table
+                ws.Range("I" & Summary_Table_Row).Value = Ticker_Symbol
+
+              ' Print the Total Stock Amount in the Summary Table
+                ws.Range("L" & Summary_Table_Row).Value = Total_Stock_Volume
+                
+                ' Reset the Total Stock Volume
+                    Total_Stock_Volume = 0
+
+                 ' Set the Closing Price
+                    Closing_Price = ws.Cells(i, 6).Value
+
+                  ' Add the Yearly Change
+                      Yearly_Change = Closing_Price - Opening_Price
+                      ws.Range("J" & Summary_Table_Row).Value = Yearly_Change
+
+                 ' Add Percent Change
+                      If (Opening_Price = 0 And Closing_Price = 0) Then
+                        Percent_Change = 0
+
+                     Else
+                        Percent_Change = Yearly_Change / Opening_Price
+                        ws.Cells(i, 11).Value = Percent_Change
+                        ws.Cells(i 11).NumberFormat = "0.00%"
+                        ws.Range("K" & Summary_Table_Row).Value = Percent_Change
+                     End If 
+
+                 ' Add to the Total Stock Volume amount
+                     Total_Stock_Volume = Total_Stock_Volume + ws.Cells(i, 7).Value
+                     Cells(Row, Column + 11).Value = Total_Stock_Volume
+
+                  ' Reset the Opening Price
+                     Opening_Price = ws.Range("C" & Previous_Amount)
+
+                  ' Reset the Total Stock Volume
+                      Total_Stock_Volume = 0
+                      
+              'If Cells have the same ticker symbol
+                Else  
+                  Total_Stock_Volume = Total_Stock_Volume + ws.Cells(i, Column + 6).Value
+             End If
+
+            ' Set the cell colors
+              If ws.Range("J" & Summary_Table_Row).Value >= 0 Then
+                  ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 4
+              
+              Else
+                ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 3
+                
+              End If
+
+            ' Add one to the summary table row
+                Summary_Table_Row = Summary_Table_Row + 1
+                Previous_Amount = i + 1
+            
+            Next i
+      
+            'resize Columns
+              Columns("I:Q").EntireColumn.AutoFit
+    
+    End Sub
