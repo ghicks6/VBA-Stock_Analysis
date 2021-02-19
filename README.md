@@ -1,6 +1,6 @@
 # VBA-Challenge
 ## The VBA of Wall Street
-Utilize VBA script to analyze real stock market data.
+Utilized VBA script to analyze real stock market data.
 
 Estimation:
 Created a script that will loop through each year of stock data and grab the total amount of volume each stock had over the year.
