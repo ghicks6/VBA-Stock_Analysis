@@ -1,6 +1,5 @@
-# VBA-challenge
-GT Data Analytics Boot Camp VBA homework
-The VBA of Wall Street
+# VBA-Challenge
+## The VBA of Wall Street
 Utilize VBA script to analyze real stock market data.
 
 Estimation:
