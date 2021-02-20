@@ -1,5 +1,4 @@
-# VBA-Challenge
-## The VBA of Wall Street
+# The VBA of Wall Street
 Utilized VBA script to analyze real stock market data.
 
 Estimation:
