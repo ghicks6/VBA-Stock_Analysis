@@ -1,4 +1,4 @@
-# VBA Stock Analysis
+# VBA Stock Market Analysis
 Utilized VBA script to analyze real stock market data.
 
 Estimation:
