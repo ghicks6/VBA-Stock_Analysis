@@ -1,4 +1,4 @@
-# The VBA of Wall Street
+# VBA Stock Analysis
 Utilized VBA script to analyze real stock market data.
 
 Estimation:
